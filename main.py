@@ -1,15 +1,13 @@
-from flask import Flask
+from flask import Flask,request
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-@app.route("/")
-
 form = ''' 
 <!DOCTYPE html>
-
 <html>
     <head>
+        
         <style>
         form {
             background-color: $eee;
@@ -27,12 +25,25 @@ form = '''
         </style>
     </head>
     <body>
-        <!-- create my form here -->
+        <form action="/message" method="post">
+            <label for="original-message">How many characters would you like to rotate by?</label>
+            <input id="original-message" type="text" name="rot" value="0" />
+            <textarea name="text" rows="10" columns="30"> What message would you like to encrypt</textarea>
+            <input type="submit" />
+
+        </form>
     </body>
 </html>
 '''
 
+@app.route("/")
 def index():
-    return
+    return form
+
+@app.route("/message", methods=["POST"])
+def message():
+    raw_message = request.form["text"]
+    return "<h1>Your original message is:" + raw_message + "</h1>"
+
 
 app.run()
